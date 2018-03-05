@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Thread extends Model
 {
+    protected $guarded = [];
     /**
      * Get path of thread
      *
@@ -16,4 +18,13 @@ class Thread extends Model
         return '/threads/' . $this->id;
     }
 
+    /**
+     * A thread can has many replies.
+     *
+     * @return HasMany
+     */
+    public function replies()
+    {
+        return $this->hasMany(Reply::class);
+    }
 }
