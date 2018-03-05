@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Thread extends Model
@@ -26,5 +27,26 @@ class Thread extends Model
     public function replies()
     {
         return $this->hasMany(Reply::class);
+    }
+
+    /**
+     * Threads belongs to a user/creator.
+     *
+     * @return BelongsTo
+     */
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    /**
+     * A authenticated user can addReply.
+     *
+     * @param $reply
+     * @return Model
+     */
+    public function addReply($reply)
+    {
+        return $this->replies()->create($reply);
     }
 }
