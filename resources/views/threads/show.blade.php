@@ -11,7 +11,6 @@
 
                     <div class="card-body">
                         {{ $thread->body }}
-                    <hr>
                     </div>
                 </div>
             </div>

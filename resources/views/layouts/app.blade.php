@@ -39,6 +39,10 @@
                                 @endforeach
                             </div>
                         </li>
+
+                        <li class="nav-link">
+                            <a href="/threads/create">New Thread</a>
+                        </li>
                     </ul>
 
 
