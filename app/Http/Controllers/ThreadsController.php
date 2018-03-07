@@ -33,8 +33,10 @@ class ThreadsController extends Controller
 
         // if request('by'), we should filter by given username.
         if ($username = request('by')) {
+
             $user = User::where('name', $username)->firstOrFail();
-            $threads = Thread::where('user_id', $user->id);
+
+            $threads->where('user_id', $user->id);
         }
 
         $threads = $threads->get();
