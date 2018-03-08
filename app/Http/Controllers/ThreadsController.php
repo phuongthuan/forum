@@ -6,6 +6,7 @@ use App\Filters\ThreadFilters;
 use App\Thread;
 use App\Channel;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\View\View;
@@ -112,7 +113,7 @@ class ThreadsController extends Controller
     /**
      * @param Channel $channel
      * @param ThreadFilters $filters
-     * @return \Illuminate\Database\Query\Builder|static
+     * @return Builder|static
      */
     protected function getThreads(Channel $channel, ThreadFilters $filters)
     {
