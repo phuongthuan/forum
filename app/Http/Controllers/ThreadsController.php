@@ -73,15 +73,15 @@ class ThreadsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param $channelId
+     * @param $channel
      * @param  Thread $thread
      * @return Response
      */
-    public function show($channelId, Thread $thread)
+    public function show($channel, Thread $thread)
     {
         return view('threads.show', [
             'thread' => $thread,
-            'replies' => $thread->replies()->paginate(20),
+            'replies' => $thread->replies()->paginate(5),
         ]);
     }
 
@@ -102,13 +102,23 @@ class ThreadsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
+     * @param $channel
      * @param  Thread $thread
      * @return Response
+     * @throws \Exception
      */
-    public function destroy(Thread $thread)
+    public function destroy($channel, Thread $thread)
     {
-        //
+        $this->authorize('update', $thread);
+
+        $thread->delete();
+
+        if (request()->wantsJson()) {
+            return response([], 204);
+        }
+        return redirect('/threads');
     }
+
 
     /**
      * @param Channel $channel
