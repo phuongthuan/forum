@@ -5,9 +5,12 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use ReflectionClass;
 
 class Thread extends Model
 {
+    use Activitable;
+
     protected $guarded = [];
 
     protected $with = ['creator', 'channel'];
@@ -21,10 +24,13 @@ class Thread extends Model
            $builder->withCount('replies');
         });
 
+        // When a thread be deleted, all of the replies must me deleve as well.
         static::deleting(function ($thread) {
             $thread->replies()->delete();
         });
     }
+
+
     /**
      * Get path of thread
      *

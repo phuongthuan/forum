@@ -21,6 +21,7 @@ class ThreadsTableSeeder extends Seeder
         ]);
 
         $threads = factory(Thread::class, 10)->create();
+
         $threads->each(function ($thread) {
            factory(Reply::class, 5)->create(['thread_id' => $thread->id]);
         });
