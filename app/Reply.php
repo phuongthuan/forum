@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Reply extends Model
 {
-    use Favoritable;
+    use Favoritable, Activitable;
 
     protected $guarded = [];
 
