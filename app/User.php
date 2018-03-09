@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -26,4 +27,36 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    /**
+     * Get route keyname of User.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'name';
+    }
+
+    /**
+     * A User can has many threads.
+     *
+     * @return HasMany
+     */
+    public function threads()
+    {
+        return $this->hasMany(Thread::class)
+                    ->latest();
+    }
+
+
+
+
+
+
+
+
+
+
 }
