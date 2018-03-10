@@ -6,14 +6,12 @@ use ReflectionClass;
 
 trait Activitable
 {
-
-
     /**
      * @return array
      */
     protected static function getType()
     {
-        return ['created'];
+        return ['created', 'deleted'];
     }
 
 

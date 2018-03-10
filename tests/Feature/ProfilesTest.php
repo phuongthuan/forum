@@ -23,11 +23,11 @@ class ProfilesTest extends TestCase
     /** @test */
     public function an_authenticated_user_can_have_threads_in_profile_page()
     {
-        $user = create(User::class);
+        $this->signIn();
 
-        $thread = create(Thread::class, ['user_id' => $user->id]);
+        $thread = create(Thread::class, ['user_id' => auth()->id()]);
 
-        $this->get("/profiles/{$user->name}")
+        $this->get("/profiles/". auth()->user()->name)
             ->assertSee($thread->title)
             ->assertSee($thread->body);
 

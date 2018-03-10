@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Activitable;
 
     /**
      * The attributes that are mass assignable.
@@ -50,13 +50,15 @@ class User extends Authenticatable
                     ->latest();
     }
 
-
-
-
-
-
-
-
+    /**
+     * A user can has many activities.
+     *
+     * @return HasMany
+     */
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
 
 
 }

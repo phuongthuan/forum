@@ -29,7 +29,6 @@
                 @empty
                     <p>There are no relevant results at this time. </p>
                 @endforelse
-
             </div>
         </div>
     </div>

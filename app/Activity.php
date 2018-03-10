@@ -16,4 +16,22 @@ class Activity extends Model
     {
         return $this->morphTo();
     }
+
+    /**
+     * @param $user
+     * @param int $take
+     * @return mixed
+     */
+    public static function feed($user, $take = 50)
+    {
+        return $user->activities()
+            ->latest()
+            ->take($take)
+            ->with('subjectable')
+            ->get()
+            ->groupBy(function ($activity) {
+            return $activity->created_at->format('Y-m-d');
+        });
+    }
+
 }
