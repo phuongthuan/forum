@@ -17,6 +17,7 @@ trait Favoritable
         return $this->morphMany(Favorite::class, 'favoritable');
     }
 
+
     public function favorite()
     {
         //Check if that favorite wasn't liked, let create a favorite.
