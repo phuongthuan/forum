@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use ReflectionClass;
 
 trait Activitable
@@ -11,7 +12,7 @@ trait Activitable
      */
     protected static function getType()
     {
-        return ['created', 'deleted'];
+        return ['created'];
     }
 
 
@@ -25,16 +26,12 @@ trait Activitable
                 $model->recordActivity($type);
             });
         }
+
+        static::deleting(function ($model) {
+            $model->activity()->delete();
+        });
     }
 
-    /**
-     *
-     * @return mixed
-     */
-    public function activity()
-    {
-        return $this->morphMany(Activity::class, 'subjectable');
-    }
 
     /**
      * Create the activities when user handle.
@@ -48,6 +45,16 @@ trait Activitable
             'user_id' => auth()->id(),
             'type' => $this->getActivityType($event), // it will display => 'created_thread'
         ]);
+    }
+
+    /**
+     * Fetch the activity relationship.
+     *
+     * @return MorphMany
+     */
+    public function activity()
+    {
+        return $this->morphMany(Activity::class, 'subjectable');
     }
 
     /**
