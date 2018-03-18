@@ -51,7 +51,7 @@
                             <textarea name="body" id="body" class="form-control" placeholder="Have something to say?" rows="5"></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-default">Post</button>
+                        <button type="submit" class="btn btn-default">Leave comment</button>
                     </form>
                 @else
                     <div class="col-md-auto">
