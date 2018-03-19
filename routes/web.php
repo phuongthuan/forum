@@ -30,6 +30,7 @@ Route::get('threads/{channel}', "ThreadsController@index");
 //Replies routes:
 Route::post('/threads/{channel}/{thread}/replies', "RepliesController@store");
 Route::delete('/replies/{reply}', 'RepliesController@destroy');
+Route::patch('/replies/{reply}', 'RepliesController@update');
 
 
 Route::post('/replies/{reply}/favorites', "FavoritesController@store");
