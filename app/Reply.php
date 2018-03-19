@@ -14,6 +14,16 @@ class Reply extends Model
     protected $with = ['owner', 'favorites'];
 
     /**
+     * Get reply path of specified reply in a thread.
+     *
+     * @return string
+     */
+    public function path()
+    {
+        return $this->thread->path() . "#reply-{$this->id}";
+    }
+
+    /**
      * Replies belong to a thread.
      *
      * @return BelongsTo
@@ -32,5 +42,4 @@ class Reply extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
 }
