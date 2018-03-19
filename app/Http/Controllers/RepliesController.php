@@ -45,10 +45,19 @@ class RepliesController extends Controller
     public function destroy(Reply $reply)
     {
         $this->authorize('update', $reply);
-
         $reply->delete();
-
         return back();
     }
 
+    /**
+     * Update a specified reply.
+     *
+     * @param Reply $reply
+     * @throws AuthorizationException
+     */
+    public function update(Reply $reply)
+    {
+        $this->authorize('update', $reply);
+        $reply->update(['body' => request('body')]);
+    }
 }
