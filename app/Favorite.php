@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Favorite extends Model
 {
@@ -10,5 +11,11 @@ class Favorite extends Model
 
     protected $guarded = [];
 
-
+    /**
+     * @return MorphTo
+     */
+    public function favoritable()
+    {
+        return $this->morphTo();
+    }
 }

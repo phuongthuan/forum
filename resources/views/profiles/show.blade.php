@@ -3,6 +3,7 @@
 @section('content')
 
     <div class="container">
+
         <div class="row justify-content-center">
             <div class="col-md-8 col-md-offset-2">
                 <h1>
@@ -18,7 +19,9 @@
 
                         <div class="card-body">
                             @foreach($activity as $record)
-                                @include("profiles.activities.{$record->type}", ['activity' => $record])
+                                @if(view()->exists("profiles.activities.{$record->type}"))
+                                    @include("profiles.activities.{$record->type}", ['activity' => $record])
+                                @endif
                                 <hr>
                             @endforeach
                         </div>
