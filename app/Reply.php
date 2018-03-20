@@ -13,6 +13,8 @@ class Reply extends Model
 
     protected $with = ['owner', 'favorites'];
 
+    protected $appends = ['favoritesCount', 'isFavorited'];
+
     /**
      * Get reply path of specified reply in a thread.
      *
