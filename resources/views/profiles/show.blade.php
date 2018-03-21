@@ -11,7 +11,7 @@
                 </h1>
                 <hr>
 
-                @foreach($activities as $date =>  $activity)
+                @forelse($activities as $date =>  $activity)
                     <div class="card">
                         <div class="card-header">
                             <h3>{{ $date }}.</h3>
@@ -27,7 +27,9 @@
                         </div>
                     </div>
                     <br><br>
-                @endforeach
+                @empty
+                    <p>There is no activity for this user yet.</p>
+                @endforelse
                 <br>
             </div>
         </div>
