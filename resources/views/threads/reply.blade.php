@@ -8,17 +8,16 @@
                     </a> said <b>{{ $reply->created_at->diffForHumans() }} ...</b>
                 </h6>
                 <div>
-
                 {{--Favorite button--}}
-                    <favorite :reply="{{ $reply }}"></favorite>
-
-                    {{--<form method="POST" action="/replies/{{ $reply->id }}/favorites">--}}
+                    @if(Auth::check())
+                        <favorite :reply="{{ $reply }}"></favorite>
+                        {{--<form method="POST" action="/replies/{{ $reply->id }}/favorites">--}}
                         {{--{{ csrf_field() }}--}}
                         {{--<button type="submit" class="btn btn-default btn-sm" {{ $reply->isFavorited() ? 'disabled' : '' }}>--}}
-                            {{--{{ $reply->favorites_count }} {{ str_plural('Favorite', $reply->favorites_count) }}--}}
+                        {{--{{ $reply->favorites_count }} {{ str_plural('Favorite', $reply->favorites_count) }}--}}
                         {{--</button>--}}
-                    {{--</form>--}}
-
+                        {{--</form>--}}
+                    @endif
                 </div>
             </div>
 

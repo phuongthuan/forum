@@ -8,6 +8,13 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait Favoritable
 {
+    protected static function bootFavoritable()
+    {
+        static::deleting(function ($model) {
+            $model->favorites->each->delete();
+        });
+    }
+    
     /**
      * A reply can morph many to favorites.
      *
@@ -40,7 +47,7 @@ trait Favoritable
     {
         $user_id = ['user_id' => auth()->id()];
 
-        $this->favorites()->where($user_id)->delete();
+        $this->favorites()->where($user_id)->get()->each->delete();
     }
 
     /**
