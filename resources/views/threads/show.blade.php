@@ -33,10 +33,10 @@
                     </div>
 
                     <hr>
-                    {{--Reply--}}
-                    <replies :data="{{ $thread->replies }}" @removed="repliesCount--" @created="repliesCount++"></replies>
 
-                    {{ $replies->links() }}
+                    {{--Reply--}}
+                    <replies @removed="repliesCount--" @added="repliesCount++"></replies>
+
                     <br>
 
                 </div>
