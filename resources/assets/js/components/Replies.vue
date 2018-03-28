@@ -4,24 +4,33 @@
             <reply :data="reply" @deleted="remove(index)"></reply>
             <br>
         </div>
+        <new-reply :endpoint="endpoint" @created="add"></new-reply>
+        <br>
     </div>
 </template>
 
 <script>
     import Reply from './Reply.vue';
+    import NewReply from './NewReply.vue';
 
     export default {
-        components: { Reply },
+        components: { Reply, NewReply },
 
         props: ['data'], //:data
 
         data() {
             return {
-                items: this.data // items = all of the $threads collection.
+                items: this.data, // items = all of the $threads collection.
+                endpoint: location.pathname + '/replies'
             }
         },
 
         methods: {
+            add(reply) {
+                this.items.push(reply);
+                this.$emit('created');
+            },
+
             remove(index) {
                 this.items.splice(index, 1);
 
