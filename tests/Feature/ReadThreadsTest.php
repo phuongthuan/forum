@@ -37,10 +37,9 @@ class ReadThreadsTest extends TestCase
     /** @test */
     function a_user_can_read_replies_that_are_associated_with_a_thread()
     {
-        $reply = factory(Reply::class)
-            ->create(['thread_id' => $this->thread->id]);
-        $this->get($this->thread->path())
-            ->assertSee($reply->body);
+        $reply = factory(Reply::class)->create(['thread_id' => $this->thread->id]);
+
+        $this->assertDatabaseHas('replies', ['body' => $reply->body]);
     }
     
     /** @test */
@@ -89,6 +88,18 @@ class ReadThreadsTest extends TestCase
     }
 
     /** @test */
+    public function a_user_can_filter_thread_by_unanswered()
+    {
+        $thread = create(Thread::class);
+
+        create(Reply::class, ['thread_id' => $thread->id]);
+
+        $response = $this->getJson('threads?unanswered=1')->json();
+
+        $this->assertCount(1, $response);
+    }
+
+    /** @test */
     public function a_user_can_request_all_replies_based_on_thread()
     {
         $thread = create(Thread::class);
@@ -97,7 +108,6 @@ class ReadThreadsTest extends TestCase
 
         $response = $this->getJson($thread->path() . '/replies')->json();
 
-        $this->assertCount(1, $response['data']);
         $this->assertEquals(2, $response['total']);
     }
 
