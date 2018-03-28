@@ -20,10 +20,6 @@ class Thread extends Model
     {
         parent::boot();
 
-        static::addGlobalScope('replyCount', function ($builder) {
-           $builder->withCount('replies');
-        });
-
         // When a thread be deleted, all of the replies must me deleve as well.
         static::deleting(function ($thread) {
             $thread->replies->each->delete();
