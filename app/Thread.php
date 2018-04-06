@@ -89,4 +89,37 @@ class Thread extends Model
     }
 
 
+    /**
+     * User subcribe a thread.
+     *
+     * @param null $userId
+     */
+    public function subcribe($userId = null)
+    {
+        $this->subcriptions()->create([
+            'user_id' => $userId ?: auth()->id()
+        ]);
+    }
+
+    /**
+     * User unsubcribe a thread.
+     *
+     * @param null $userId
+     */
+    public function unsubcribe($userId = null)
+    {
+        $this->subcriptions()
+            ->where('user_id', $userId ?: auth()->id())->delete();
+    }
+
+    /**
+     * A thread can has many subcriptions.
+     *
+     * @return HasMany
+     */
+    public function subcriptions()
+    {
+        return $this->hasMany(ThreadSubcription::class);
+    }
+
 }
