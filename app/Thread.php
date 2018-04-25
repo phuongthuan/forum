@@ -15,6 +15,7 @@ class Thread extends Model
 
     protected $with = ['creator', 'channel'];
 
+    protected $appends = ['isSubcribedTo'];
 
     protected static function boot()
     {
@@ -120,6 +121,18 @@ class Thread extends Model
     public function subcriptions()
     {
         return $this->hasMany(ThreadSubcription::class);
+    }
+
+    /**
+     * Check thread isSubcribed?
+     *
+     * @return bool
+     */
+    public function getIsSubcribedToAttribute()
+    {
+        return $this->subcriptions()
+            ->where('user_id', auth()->id())
+            ->exists();
     }
 
 }
