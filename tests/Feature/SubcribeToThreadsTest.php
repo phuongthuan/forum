@@ -15,13 +15,25 @@ class SubcribeToThreadsTest extends TestCase
     {
         $this->signIn();
 
-        //Given we have a thread.
         $thread = create(Thread::class);
 
-        //When the user subcribes to the thread.
         $this->post($thread->path() . '/subcriptions');
 
         $this->assertCount(1, $thread->subcriptions);
+    }
 
+    /** @test */
+    public function a_user_can_unsubcribe_from_threads()
+    {
+
+        $this->signIn();
+
+        $thread = create(Thread::class);
+
+        $thread->subcribe();
+
+        $this->delete($thread->path() . '/subcriptions');
+
+        $this->assertCount(0, $thread->subcriptions);
     }
 }

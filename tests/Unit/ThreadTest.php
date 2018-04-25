@@ -86,14 +86,4 @@ class ThreadTest extends TestCase
         $this->assertCount(0, $thread->subcriptions);
     }
 
-
-
-
-
-
-
-
-
-
-
 }
