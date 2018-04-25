@@ -26,6 +26,7 @@ Route::get('/threads/{channel}/{thread}', 'ThreadsController@show');
 Route::delete('/threads/{channel}/{thread}', 'ThreadsController@destroy');
 Route::post('/threads', 'ThreadsController@store');
 Route::get('threads/{channel}', "ThreadsController@index");
+Route::post('/threads/{channel}/{thread}/subcriptions', 'ThreadSubcriptionsController@store')->middleware('auth');
 
 //Replies routes:
 Route::get('/threads/{channel}/{thread}/replies', "RepliesController@index");
