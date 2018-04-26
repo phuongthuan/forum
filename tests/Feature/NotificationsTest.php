@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Thread;
 use App\User;
+use Illuminate\Notifications\DatabaseNotification;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -11,11 +12,15 @@ class NotificationsTest extends TestCase
 {
     use RefreshDatabase;
 
-    /** @test */
-    public function a_notification_is_prepared_when_a_subcribed_thread_recieves_a_new_reply()
+    public function setUp()
     {
+        parent::setUp();
         $this->signIn();
+    }
 
+    /** @test */
+    public function a_notification_is_prepared_when_a_subcribed_thread_recieves_a_new_reply_that_is_not_by_the_current_user()
+    {
         $thread = create(Thread::class);
 
         $thread->addReply([
@@ -36,14 +41,7 @@ class NotificationsTest extends TestCase
     /** @test */
     public function a_user_can_fetch_their_unread_notifications()
     {
-        $this->signIn();
-
-        $thread = create(Thread::class)->subcribe();
-
-        $thread->addReply([
-            'user_id' => create(User::class)->id,
-            'body' => 'Some reply here'
-        ]);
+        create(DatabaseNotification::class);
 
         $user = auth()->user();
 
@@ -55,14 +53,7 @@ class NotificationsTest extends TestCase
     /** @test */
     public function a_user_can_clear_notifications_as_read()
     {
-        $this->signIn();
-
-        $thread = create(Thread::class)->subcribe();
-
-        $thread->addReply([
-            'user_id' => create(User::class)->id,
-            'body' => 'Some reply here'
-        ]);
+        create(DatabaseNotification::class);
 
         $user = auth()->user();
 
