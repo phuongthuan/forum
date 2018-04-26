@@ -19,7 +19,8 @@ class SubcribeToThreadsTest extends TestCase
 
         $this->post($thread->path() . '/subcriptions');
 
-        $this->assertCount(1, $thread->subcriptions);
+        $this->assertCount(1, $thread->fresh()->subcriptions);
+
     }
 
     /** @test */
