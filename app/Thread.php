@@ -152,4 +152,17 @@ class Thread extends Model
             ->each
             ->notify($reply);
     }
+
+    /**
+     * @param $user
+     * @return bool
+     * @throws \Exception
+     */
+    public function hasUpdatesFor($user)
+    {
+        // Look in the cache for the proper key.
+        // Compare that carbon instance with the $thread->updated_at
+        $key = $user->visitedThreadCacheKey($this);
+        return $this->updated_at > cache($key);
+    }
 }
