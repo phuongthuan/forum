@@ -2,10 +2,12 @@
 
 namespace Tests\Unit;
 
+use App\Notifications\ThreadWasUpdated;
 use App\Thread;
 use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Notification;
 use Tests\TestCase;
 
 class ThreadTest extends TestCase
@@ -73,6 +75,22 @@ class ThreadTest extends TestCase
     }
 
     /** @test */
+    public function a_thread_notify_all_subcribers_when_reply_was_added()
+    {
+        Notification::fake();
+
+        $this->signIn()
+            ->thread
+            ->subcribe()
+            ->addReply([
+                'body' => 'FooBar',
+                'user_id' => 1,
+            ]);
+
+        Notification::assertSentTo(auth()->user(), ThreadWasUpdated::class);
+    }
+
+    /** @test */
     public function a_thread_can_be_unsubcribed()
     {
         $thread = create(Thread::class);
@@ -85,5 +103,4 @@ class ThreadTest extends TestCase
 
         $this->assertCount(0, $thread->subcriptions);
     }
-
 }
