@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Filters\ThreadFilters;
 use App\Thread;
 use App\Channel;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
@@ -77,9 +78,15 @@ class ThreadsController extends Controller
      * @param $channel
      * @param  Thread $thread
      * @return Response
+     * @throws \Exception
      */
     public function show($channel, Thread $thread)
     {
+        // Record that the user visited this page.
+        // Record a timestamp.
+        if (auth()->check()) {
+            auth()->user()->read($thread);
+        }
         return view('threads.show', compact('thread'));
     }
 
