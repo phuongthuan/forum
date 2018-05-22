@@ -2,11 +2,9 @@
 
 namespace App;
 
-use App\Notifications\ThreadWasUpdated;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use ReflectionClass;
 
 class Thread extends Model
 {
@@ -79,13 +77,8 @@ class Thread extends Model
     {
         $reply = $this->replies()->create($reply);
 
-        $this->subcriptions
-            ->filter(function ($sub) use ($reply) {
-                return $sub->user_id != $reply->user_id;
-            })
-            ->each(function ($sub) use ($reply) {
-                $sub->notify($reply);
-            });
+        $this->notifySubcribers($reply);
+
         return $reply;
     }
 
@@ -147,4 +140,16 @@ class Thread extends Model
             ->exists();
     }
 
+    /**
+     * Notify for Subcribers.
+     *
+     * @param $reply
+     */
+    public function notifySubcribers($reply)
+    {
+        $this->subcriptions
+            ->where('user_id', '!=', $reply->user_id)
+            ->each
+            ->notify($reply);
+    }
 }
