@@ -5,7 +5,6 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use ReflectionClass;
 
 class Thread extends Model
 {
@@ -15,6 +14,7 @@ class Thread extends Model
 
     protected $with = ['creator', 'channel'];
 
+    protected $appends = ['isSubcribedTo'];
 
     protected static function boot()
     {
@@ -75,7 +75,12 @@ class Thread extends Model
      */
     public function addReply($reply)
     {
-        return $this->replies()->create($reply);
+
+        $reply = $this->replies()->create($reply);
+
+        $this->notifySubcribers($reply);
+
+        return $reply;
     }
 
     /**
@@ -93,12 +98,14 @@ class Thread extends Model
      * User subcribe a thread.
      *
      * @param null $userId
+     * @return Thread
      */
     public function subcribe($userId = null)
     {
         $this->subcriptions()->create([
             'user_id' => $userId ?: auth()->id()
         ]);
+        return $this;
     }
 
     /**
@@ -122,4 +129,41 @@ class Thread extends Model
         return $this->hasMany(ThreadSubcription::class);
     }
 
+    /**
+     * Check thread isSubcribed?
+     *
+     * @return bool
+     */
+    public function getIsSubcribedToAttribute()
+    {
+        return $this->subcriptions()
+            ->where('user_id', auth()->id())
+            ->exists();
+    }
+
+    /**
+     * Notify for Subcribers.
+     *
+     * @param $reply
+     */
+    public function notifySubcribers($reply)
+    {
+        $this->subcriptions
+            ->where('user_id', '!=', $reply->user_id)
+            ->each
+            ->notify($reply);
+    }
+
+    /**
+     * @param $user
+     * @return bool
+     * @throws \Exception
+     */
+    public function hasUpdatesFor($user)
+    {
+        // Look in the cache for the proper key.
+        // Compare that carbon instance with the $thread->updated_at
+        $key = $user->visitedThreadCacheKey($this);
+        return $this->updated_at > cache($key);
+    }
 }
