@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Inspections\Spam;
 use App\Reply;
-use App\Spam;
 use App\Thread;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\RedirectResponse;
 
 class RepliesController extends Controller
