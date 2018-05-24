@@ -2,13 +2,13 @@
 
 namespace Tests\Unit;
 
-use App\Spam;
+use App\Inspections\Spam;
 use Tests\TestCase;
 
 class SpamTest extends TestCase
 {
     /** @test */
-    public function it_validates_spam()
+    public function it_check_for_validates_keyword()
     {
         $spam = new Spam();
 
@@ -17,5 +17,15 @@ class SpamTest extends TestCase
         $this->expectException('Exception');
 
         $spam->detect('yahoo customer support');
+    }
+
+    /** @test */
+    public function it_check_for_helddown_keyword()
+    {
+        $spam = new Spam();
+
+        $this->expectException('Exception');
+
+        $spam->detect('Hello world aaaaaaaaaaaaa');
     }
 }
