@@ -1,6 +1,8 @@
 <?php
 
+use App\User;
 use Faker\Generator as Faker;
+use Illuminate\Notifications\DatabaseNotification;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,7 @@ $factory->define(App\User::class, function (Faker $faker) {
 $factory->define(App\Thread::class, function (Faker $faker) {
     return [
         'user_id' => function () {
-            return factory(\App\User::class)->create()->id;
+            return factory(User::class)->create()->id;
         },
         'channel_id' => function () {
             return factory(\App\Channel::class)->create()->id;
@@ -47,12 +49,24 @@ $factory->define(App\Channel::class, function (Faker $faker) {
 $factory->define(App\Reply::class, function (Faker $faker) {
     return [
         'user_id' => function () {
-            return factory(\App\User::class)->create()->id;
+            return factory(User::class)->create()->id;
         },
         'thread_id' => function () {
             return factory(\App\Thread::class)->create()->id;
         },
         'body' => $faker->paragraph,
+    ];
+});
+
+$factory->define(DatabaseNotification::class, function (Faker $faker) {
+    return [
+        'id' => \Ramsey\Uuid\Uuid::uuid4()->toString(),
+        'type' => 'App\Notifications\ThreadWasUpdated',
+        'notifiable_id' => function() {
+            return auth()->id() ?: factory(User::class)->create()->id;
+        },
+        'notifiable_type' => 'App\User',
+        'data' => ['foo', 'bar']
     ];
 });
 

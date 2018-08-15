@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Filters\ThreadFilters;
+use App\Inspections\Spam;
 use App\Thread;
 use App\Channel;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
@@ -45,20 +47,24 @@ class ThreadsController extends Controller
     {
         return view('threads.create');
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  Request $request
+     * @param Spam $spam
      * @return Response
+     * @throws \Exception
      */
-    public function store(Request $request)
+    public function store(Request $request, Spam $spam)
     {
         $this->validate($request, [
             'title' => 'required',
             'body' => 'required',
             'channel_id' => 'required|exists:channels,id',
         ]);
+
+        $spam->detect(request('body'));
 
         $thread = Thread::create([
             'user_id' => auth()->id(),
@@ -77,9 +83,15 @@ class ThreadsController extends Controller
      * @param $channel
      * @param  Thread $thread
      * @return Response
+     * @throws \Exception
      */
     public function show($channel, Thread $thread)
     {
+        // Record that the user visited this page.
+        // Record a timestamp.
+        if (auth()->check()) {
+            auth()->user()->read($thread);
+        }
         return view('threads.show', compact('thread'));
     }
 

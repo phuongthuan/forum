@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Inspections\Spam;
 use App\Reply;
 use App\Thread;
 use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\RedirectResponse;
 
 class RepliesController extends Controller
@@ -30,9 +30,7 @@ class RepliesController extends Controller
      */
     public function store($channelId, Thread $thread)
     {
-        $this->validate(request(), [
-            'body' => 'required',
-        ]);
+        $this->validateReply();
 
         $reply = $thread->addReply([
             'body' => request('body'),
@@ -72,6 +70,15 @@ class RepliesController extends Controller
     public function update(Reply $reply)
     {
         $this->authorize('update', $reply);
+        $this->validateReply();
         $reply->update(['body' => request('body')]);
+    }
+
+    /**
+     */
+    private function validateReply()
+    {
+        $this->validate(request(), ['body' => 'required']);
+        resolve(Spam::class)->detect(request('body'));
     }
 }
